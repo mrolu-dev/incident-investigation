@@ -2,7 +2,7 @@ version: '3'
 services:
   incident-service:
     build:
-      context: ./incident-investigation/incident-service
+      context: ./incident-service
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -13,7 +13,7 @@ services:
 
   scat-analysis-service:
     build:
-      context: ./incident-investigation/scat-analysis-service
+      context: ./scat-analysis-service
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
@@ -22,5 +22,37 @@ services:
 
   mongodb:
     image: mongo:latest
+    restart: always
+    container_name: mongodb
+    # Optional: Uncomment the following lines to set environment variables for MongoDB
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ristabel
+      MONGO_INITDB_ROOT_PASSWORD: MonAvi1$
+    # Optional: Uncomment the following line to mount a data volume for persistent data storage
+    # volumes:
+    #   - ./data/db:/data/db
+
+  mongo-express:
+    image: mongo-express
+    restart: always
     ports:
       - "27017:27017"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ristabel
+      ME_CONFIG_MONGODB_ADMINPASSWORD: MonAvi1$
+      ME_CONFIG_MONGODB_URL: mongodb://ristabel:MonAvi1$@mongo:27017/
+
+    api-gateway:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+      ports:
+      - "80:80"
+    depends_on:
+      - incident-service
+      - scat-analysis-service
+      
+networks:
+  default:
+    external:
+      name: my_network
