@@ -1,0 +1,4 @@
+com\example\Application.class
+com\example\repositories\IncidentRepository.class
+com\example\controllers\IncidentController.class
+com\example\models\Incident.class
