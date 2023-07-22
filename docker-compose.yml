@@ -1,0 +1,26 @@
+version: '3'
+services:
+  incident-service:
+    build:
+      context: ./incident-investigation/incident-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/incident_db
+
+  scat-analysis-service:
+    build:
+      context: ./incident-investigation/scat-analysis-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - incident-service
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"

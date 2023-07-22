@@ -1,0 +1,5 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "maven.executable.path": "C:\\Users\\oolum\repos\\incident-investigation\\incident-service\\pom.xml",
+    "java.configuration.updateBuildConfiguration": "automatic"
+}
