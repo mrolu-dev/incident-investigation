@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Investigation App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>Incident Investigation App</h1>
+    </header>
+
+    <main>
+        <form id="incidentForm">
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div>
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+
+            <div>
+                <label for="summary">Summary of the Incident:</label>
+                <textarea id="summary" name="summary" rows="4" required></textarea>
+            </div>
+
+            <div>
+                <label for="immediateActions">Immediate Actions Taken:</label>
+                <textarea id="immediateActions" name="immediateActions" rows="4" required></textarea>
+            </div>
+
+            <div>
+                <label for="incidentType">Type of Incident:</label>
+                <select id="incidentType" name="incidentType" required>
+                    <option value="accident">Accident</option>
+                    <option value="injury">Injury</option>
+                    <option value="near-miss">Near Miss</option>
+                    <!-- Add more incident types as needed -->
+                </select>
+            </div>
+
+            <div>
+                <label for="incidentClassification">Classification of Incident:</label>
+                <select id="incidentClassification" name="incidentClassification" required>
+                    <option value="equipment">Equipment Failure</option>
+                    <option value="human-error">Human Error</option>
+                    <option value="environment">Environmental Factors</option>
+                    <!-- Add more incident classifications as needed -->
+                </select>
+            </div>
+
+            <div>
+                <label for="immediateCauses">Immediate Causes:</label>
+                <textarea id="immediateCauses" name="immediateCauses" rows="4" required></textarea>
+            </div>
+
+            <div>
+                <label for="basicCauses">Basic Causes (using SCAT analysis):</label>
+                <textarea id="basicCauses" name="basicCauses" rows="4" required></textarea>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

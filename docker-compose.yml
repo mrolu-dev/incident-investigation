@@ -5,54 +5,77 @@ services:
       context: ./incident-service
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
-    depends_on:
-      - mongodb
-    environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/incident_db
+      - "8081:8081"
+    
 
   scat-analysis-service:
     build:
       context: ./scat-analysis-service
       dockerfile: Dockerfile
     ports:
-      - "8081:8081"
+      - "8082:8082"
     depends_on:
       - incident-service
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: "mongodb://mongodb:27017/incident_db"
+
 
   mongodb:
-    image: mongo:latest
-    restart: always
-    container_name: mongodb
+   image: mongo:latest
+   restart: always
+   container_name: mongodb
     # Optional: Uncomment the following lines to set environment variables for MongoDB
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ristabel
-      MONGO_INITDB_ROOT_PASSWORD: MonAvi1$
+   environment:
+     MONGO_INITDB_ROOT_USERNAME: ristabel
+     MONGO_INITDB_ROOT_PASSWORD: MonAvi1$
+     ME_CONFIG_MONGODB_ADMINUSERNAME: ristabel
+     ME_CONFIG_MONGODB_ADMINPASSWORD: MonAvi1$
+     ME_CONFIG_MONGODB_URL: mongodb+srv://ristabel:MonAvi1$@cluster0.wlgzdod.mongodb.net/?retryWrites=true&w=majority
+   ports:
+      - 8083:8083
     # Optional: Uncomment the following line to mount a data volume for persistent data storage
-    # volumes:
-    #   - ./data/db:/data/db
+   volumes:
+     - ./data/db:/data/db
+  
 
-  mongo-express:
-    image: mongo-express
+  nginx:
     restart: always
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - "./nginx/default.conf:/etc/nginx/conf.d/default.conf"
+      - "./webapp/index.html:/usr/share/nginx/html/index.html"
+      - "./webapp/script.js:/usr/share/nginx/html/script.js"
+      - "./webapp/style.css:/usr/share/nginx/html/style.css"
     ports:
-      - "27017:27017"
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ristabel
-      ME_CONFIG_MONGODB_ADMINPASSWORD: MonAvi1$
-      ME_CONFIG_MONGODB_URL: mongodb://ristabel:MonAvi1$@mongo:27017/
+      - "8084:80"
+    command: ['nginx-debug', '-g', 'daemon off;']
+    
+  #webapp:
+    #build:
+      #context: ./nginx
+      #dockerfile: Dockerfile
+    #ports:
+      #- "8084:80"  # Map port 8080 of the host to port 80 of the container
+    #depends_on:
+      #- mongodb
+     # - scat-analysis-service
 
-    api-gateway:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-      ports:
-      - "80:80"
-    depends_on:
-      - incident-service
-      - scat-analysis-service
+  ## api-gateway:
+   ## build: 
+    ##  context: ./nginx
+      ##dockerfile: Dockerfile
+    
+    ## depends_on:
+    ##  - incident-service
+    ##  - scat-analysis-service
       
-networks:
-  default:
-    external:
-      name: my_network

@@ -3,9 +3,9 @@
     <groupId>com.example</groupId>
     <artifactId>incident-investigation</artifactId>
     <version>1.0.0</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     
-    <name>incident-investigation</name>
+    <name>incident-service</name>
 
     <organization>
 		<name>Laflor Solutions</name>
@@ -27,21 +27,26 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
   		<maven.compiler.target>1.8</maven.compiler.target>
+		<start-class>com.example.incidentinvestigation</start-class>
     </properties>
 
     <dependencies>
 
-            	<dependency>
-            		<groupId>org.springframework.boot</groupId>
-            		<artifactId>spring-boot-starter-actuator</artifactId>
-					<version>3.1.2</version>
-            	</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+	    <version>2.4.1</version>
+        </dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-war-plugin -->
+	
+
 
         <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
-            <version>3.1.2</version>
+            <version>2.7.10</version>
         </dependency>
 
         <!-- MongoDB Java Driver -->
@@ -55,35 +60,35 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-			<version>3.0.0</version>
+	    <version>2.7.7</version>
         </dependency>
 
         <dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20230618</version>
-		</dependency>
+		<groupId>org.json</groupId>
+		<artifactId>json</artifactId>
+		<version>20230618</version>
+	</dependency>
 
         <dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>3.8.1</version>
+		<scope>test</scope>
+	</dependency>
 
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-			<scope>provided</scope>
-		</dependency>
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>javax.servlet-api</artifactId>
+		<version>3.1.0</version>
+		<scope>provided</scope>
+	</dependency>
 
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>1.9.5</version>
-			<scope>test</scope>
-		</dependency>
+	<dependency>
+		<groupId>org.mockito</groupId>
+		<artifactId>mockito-core</artifactId>
+		<version>1.9.5</version>
+		<scope>test</scope>
+	</dependency>
 
         <!-- Other dependencies if needed -->
             </dependencies>
@@ -103,7 +108,7 @@
 	    
 		</distributionManagement>
     <build>
-		<finalName>incident-investigation</finalName>
+		<finalName>incident-service</finalName>
 		
 		<plugins>
 			<plugin>
@@ -120,11 +125,28 @@
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<webApp>
-						<contextPath>/incident-investigation</contextPath>
+					    <contextPath>/incident-service</contextPath>
 					</webApp>
 				</configuration>
 			</plugin>
 
+			<plugin>
+            	<groupId>org.springframework.boot</groupId>
+            	<artifactId>spring-boot-maven-plugin</artifactId>
+            	<version>2.5.2</version> <!-- Use the appropriate version of the spring-boot-maven-plugin -->
+				<configuration>
+            		<mainClass>com.example.incidentinvestigation</mainClass>
+            		<layout>JAR</layout>
+        		</configuration>
+				<executions>
+    				<execution>
+        				<goals>
+            				<goal>repackage</goal>
+        				</goals>
+    				</execution>
+				</executions>
+        	</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
@@ -133,11 +155,35 @@
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>true</downloadJavadocs>
 					<wtpversion>2.0</wtpversion>
-					<wtpContextName>incident-investigation</wtpContextName>
+					<wtpContextName>incident-service</wtpContextName>
 				</configuration>
 			</plugin>
+
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-jar-plugin</artifactId>
+        		<version>3.3.0</version>
+        		<configuration>
+          			<archive>
+            			<index>true</index>
+            			<manifest>
+              				<addClasspath>true</addClasspath>
+            			</manifest>
+           				<manifestEntries>
+              				<mode>development</mode>
+              				<url>http://localhost</url>
+              				<key>value</key>
+            			</manifestEntries>
+          			</archive>
+        		</configuration>
+        		
+      		</plugin>
 			
 		</plugins>
 	</build>
 	
 </project>
+
+
+
+
